@@ -1,0 +1,37 @@
+server:
+  port: ${SERVER_PORT:8443}
+  ssl:
+    enabled: ${SSL_ENABLED:true}
+    key-store: ${SSL_KEY_STORE:classpath:keystore/template.p12}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD:changeit}
+    key-alias: ${SSL_KEY_ALIAS:template}
+trust-store:
+  key-store: ${SSL_TRUST_STORE:classpath:keystore/truststore.p12}
+  password: ${SSL_TRUST_STORE_PASSWORD:changeit}
+  ignore-domain: ${SSL_TRUST_STORE_IGNORE_DOMAIN:true}
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: account
+          uri: ${SERVICE_ACCOUNT:https://localhost:8445}
+          predicates:
+            - Path=/api/account/**
+        - id: api
+          uri: ${SERVICE_API:https://localhost:8446}
+          predicates:
+            - Path=/api/api/**
+      default-filters:
+        - RewritePath=/api/?(?<path>.*), /$\{path}
+eureka:
+  instance:
+    secure-port-enabled: ${SSL_ENABLED:true}
+    non-secure-port-enabled: ${NON_SSL_ENABLED:false}
+    status-page-url: https://${eureka.hostname}:${SERVER_PORT:8443}/actuator/info
+    health-check-url: https://${eureka.hostname}:${SERVER_PORT:8443}/actuator/health
+    home-page-url: https://${eureka.hostname}:${SERVER_PORT:8443}/
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:https://discovery:changeit@localhost:8761/eureka/}

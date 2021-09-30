@@ -1,0 +1,66 @@
+server:
+  port: ${SERVER_PORT:8445}
+  ssl:
+    enabled: ${SSL_ENABLED:true}
+    key-store: ${SSL_KEY_STORE:classpath:keystore/template.p12}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD:changeit}
+    key-alias: ${SSL_KEY_ALIAS:template}
+trust-store:
+  key-store: ${SSL_TRUST_STORE:classpath:keystore/truststore.p12}
+  password: ${SSL_TRUST_STORE_PASSWORD:changeit}
+  ignore-domain: ${SSL_TRUST_STORE_IGNORE_DOMAIN:true}
+spring:
+  application:
+    name: account-service
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mariadb://localhost:3306/template_account}
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${DATASOURCE_USERNAME:template_account}
+    password: ${DATASOURCE_PASSWORD:changeit}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/master.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_URL:https://localhost:8444}/auth/realms/${KEYCLOAK_REALM:template}/protocol/openid-connect/certs
+      client:
+        registration:
+          admin:
+            provider: admin
+            clientId: admin-cli
+            authorization-grant-type: password
+        provider:
+          admin:
+            token-uri: ${KEYCLOAK_URL:https://localhost:8444}/auth/realms/master/protocol/openid-connect/token
+eureka:
+  instance:
+    secure-port-enabled: ${SSL_ENABLED:true}
+    non-secure-port-enabled: ${NON_SSL_ENABLED:false}
+    status-page-url: https://${eureka.hostname}:${SERVER_PORT:8445}/actuator/info
+    health-check-url: https://${eureka.hostname}:${SERVER_PORT:8445}/actuator/health
+    home-page-url: https://${eureka.hostname}:${SERVER_PORT:8445}/
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:https://discovery:changeit@localhost:8761/eureka/}
+keycloak:
+  url: ${KEYCLOAK_URL:https://localhost:8444}
+  realm: ${KEYCLOAK_REALM:template}
+  client:
+    id: ${KEYCLOAK_CLIENT_ID:template-app}
+    secret: ${KEYCLOAK_CLIENT_SECRET:be795f62-6b97-4bf0-9287-0bae9e47992f}
+  admin:
+    username: ${KEYCLOAK_USERNAME:admin}
+    password: ${KEYCLOAK_PASSWORD:admin}
+iron-session:
+  cookie-name: ${IRON_SESSION_COOKIE_NAME:template-account-session}
+  passwords: ${IRON_SESSION_PASSWORDS:viPDqiurYq7Fz9h8swv2SNdhveoXDxOG}
+  secure: ${IRON_SESSION_SECURE:true}

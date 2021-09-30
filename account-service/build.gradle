@@ -1,0 +1,24 @@
+version='0.0.1-SNAPSHOT'
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-webflux'
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+  implementation 'org.liquibase:liquibase-core'
+  implementation project(':shared')
+  implementation project(':account-contract')
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'io.projectreactor:reactor-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'com.squareup.okhttp3:mockwebserver'
+  testImplementation project(':shared-test')
+  testImplementation project(':account-client')
+  testRuntimeOnly 'com.h2database:h2'
+}

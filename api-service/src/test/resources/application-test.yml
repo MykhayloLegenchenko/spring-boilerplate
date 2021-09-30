@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    discovery:
+      enabled: false
+microservice:
+  dependencies:
+    api:
+      url: https://localhost:${SERVER_PORT}

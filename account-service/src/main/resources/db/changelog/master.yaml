@@ -1,0 +1,4 @@
+databaseChangeLog:
+- include:
+    file: v1/master-v.1.0-cumulative.yaml
+    relativeToChangelogFile: true

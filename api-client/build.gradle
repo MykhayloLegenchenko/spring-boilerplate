@@ -1,0 +1,22 @@
+version='0.0.1-SNAPSHOT'
+
+bootJar {
+  enabled = false
+}
+
+jar {
+  enabled = true
+}
+
+configurations {
+  testImplementation.extendsFrom compileOnly
+}
+
+dependencies {
+  compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+  compileOnly 'org.springframework.boot:spring-boot-starter-webflux'
+  compileOnly project(':api-contract')
+  compileOnly project(':shared')
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

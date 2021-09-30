@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT:8761}
+  ssl:
+    enabled: ${SSL_ENABLED:true}
+    key-store: ${SSL_KEY_STORE:classpath:keystore/template.p12}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD:changeit}
+    key-alias: ${SSL_KEY_ALIAS:template}
+trust-store:
+  key-store: ${SSL_TRUST_STORE:classpath:keystore/truststore.p12}
+  password: ${SSL_TRUST_STORE_PASSWORD:changeit}
+  ignore-domain: ${SSL_TRUST_STORE_IGNORE_DOMAIN:true}
+spring:
+  application:
+    name: discovery-service
+  security:
+    user:
+      name: ${SECURITY_USERNAME:discovery}
+      password: ${SECURITY_PASSWORD:changeit}
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    secure-port-enabled: ${SSL_ENABLED:true}
+    non-secure-port-enabled: ${NON_SSL_ENABLED:false}
+    status-page-url: https://${eureka.hostname}:${SERVER_PORT:8761}/actuator/info
+    health-check-url: https://${eureka.hostname}:${SERVER_PORT:8761}/actuator/health
+    home-page-url: https://${eureka.hostname}:${SERVER_PORT:8761}/
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:https://discovery:changeit@localhost:8761/eureka/}

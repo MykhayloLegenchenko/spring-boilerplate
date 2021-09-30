@@ -1,0 +1,17 @@
+version='0.0.1-SNAPSHOT'
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+  implementation project(':shared')
+  implementation project(':api-contract')
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+  testImplementation project(':shared-test')
+  testImplementation project(':api-client')
+}

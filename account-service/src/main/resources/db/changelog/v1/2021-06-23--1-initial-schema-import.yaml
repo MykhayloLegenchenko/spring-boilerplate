@@ -1,0 +1,31 @@
+databaseChangeLog:
+- changeSet:
+    id: 2021-06-23--1-initial-schema-import
+    author: Mykhaylo Legenchenko
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: user_id
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            defaultValueComputed: current_timestamp()
+            name: created_at
+            type: timestamp
+        - column:
+            constraints:
+              nullable: false
+            defaultValueComputed: current_timestamp()
+            name: updated_at
+            type: timestamp
+        - column:
+            constraints:
+              nullable: false
+            name: subscribe
+            type: BIT
+        tableName: account_profile

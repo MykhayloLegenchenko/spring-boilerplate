@@ -1,0 +1,18 @@
+pluginManagement {
+  repositories {
+    maven { url 'https://repo.spring.io/milestone' }
+    gradlePluginPortal()
+  }
+}
+rootProject.name = 'spring-boot-backend-template'
+
+include 'shared'
+include 'shared-test'
+include 'discovery-service'
+include 'gateway-service'
+include 'account-contract'
+include 'account-client'
+include 'account-service'
+include 'api-contract'
+include 'api-client'
+include 'api-service'

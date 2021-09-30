@@ -1,0 +1,123 @@
+plugins {
+  id 'org.springframework.boot' version "${springBootVersion}" apply false
+  id 'io.spring.dependency-management' version "${springDependencyManagementVersion}" apply false
+  id 'com.diffplug.spotless' version "${spotlessPluginVersion}" apply false
+  id 'com.github.spotbugs' version "${spotbugsPluginVersion}" apply false
+  id 'net.ltgt.errorprone' version "${errorpronePluginVersion}" apply false
+}
+
+allprojects {
+  repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+  }
+
+  apply plugin: 'com.diffplug.spotless'
+
+  spotless {
+    groovyGradle {
+      target '*.gradle'
+      greclipse()
+      indentWithSpaces(2)
+      endWithNewline()
+    }
+
+    json {
+      target 'src/**/*.json'
+      eclipseWtp('json')
+      indentWithSpaces(2)
+      endWithNewline()
+    }
+
+    format 'text', {
+      target '*.yml', '*.yaml', 'src/**/*.yml', 'src/**/*.yaml', '*.properties', 'src/**/*.properties'
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+  }
+}
+
+subprojects {
+  group = 'com.example.template'
+
+  apply plugin: 'org.springframework.boot'
+  apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'com.diffplug.spotless'
+  apply plugin: 'checkstyle'
+  apply plugin: 'pmd'
+  apply plugin: 'com.github.spotbugs'
+  apply plugin: 'net.ltgt.errorprone'
+  apply plugin: 'java'
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+  }
+
+  dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    errorprone "com.google.errorprone:error_prone_core:$errorproneVersion"
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+  }
+
+  test {
+    useJUnitPlatform()
+  }
+
+  plugins.withType(JavaPlugin) {
+    project.sourceCompatibility = javaVersion
+  }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Werror' << '-Xlint' << '-Xlint:-processing'
+    options.errorprone {
+      disable 'JavaTimeDefaultTimeZone', 'SameNameButDifferent', 'TypeParameterUnusedInFormals'
+    }
+  }
+
+  tasks.withType(Jar) {
+    archiveBaseName = "template-$project.name"
+  }
+
+  tasks.withType(Checkstyle) {
+    checkstyle {
+      toolVersion = checkstyleVersion
+      maxWarnings = 0
+    }
+  }
+
+  tasks.withType(Pmd) {
+    pmd {
+      toolVersion = pmdVersion
+      ruleSetFiles = files("${project.rootProject.projectDir}/config/pmd.xml")
+      incrementalAnalysis = true
+      ruleSets = []
+      // consoleOutput = true
+    }
+  }
+
+  spotless {
+    java {
+      removeUnusedImports()
+      googleJavaFormat(googleJavaFormatVersion)
+    }
+  }
+
+  spotbugs {
+    toolVersion = spotbugsVersion
+    reportLevel = 'low'
+    effort = 'max'
+    excludeFilter = file("${project.rootProject.projectDir}/config/spotbugs-exclude.xml")
+  }
+}

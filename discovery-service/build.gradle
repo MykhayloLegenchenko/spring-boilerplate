@@ -1,0 +1,10 @@
+version='0.0.1-SNAPSHOT'
+
+dependencies {
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation project(':shared')
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+}

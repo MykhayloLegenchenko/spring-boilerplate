@@ -1,0 +1,39 @@
+version: "3"
+services:
+  mariadb:
+    build: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  auth:
+    build: auth-service
+    ports:
+      - "8081:8080"
+      - "8444:8443"
+  discovery:
+    build: discovery-service
+    ports:
+      - "8761:8761"
+  gateway:
+    build: gateway-service
+    ports:
+      - "8443:8443"
+    depends_on:
+      - discovery
+  account:
+    build: account-service
+    ports:
+      - "8445:8443"
+    depends_on:
+      - discovery
+      - auth
+      - mariadb
+  api:
+    build: api-service
+    ports:
+      - "8446:8443"
+    depends_on:
+      - discovery
+      - auth
